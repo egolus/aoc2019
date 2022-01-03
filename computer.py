@@ -1,10 +1,12 @@
 from collections import defaultdict
 
+
 class Computer:
     program: defaultdict = None
     instPointer: int = 0
     output: int = None
     halted = False
+    waitingForInput = False
     relativeBase = 0
     debug = False
 
@@ -14,7 +16,10 @@ class Computer:
         for i, c in enumerate(program):
             self.program[i] = c
 
-    def run(self, inputs):
+    def run(self, inputs=None):
+        if inputs is None:
+            inputs = []
+        self.waitingForInput = False
         ipos = 0
         if self.debug:
             print("inputs:", inputs)
@@ -60,6 +65,7 @@ class Computer:
                     # wait for input
                     if self.debug:
                         print("waiting for input")
+                    self.waitingForInput = True
                     return
                 o = self.program[self.instPointer+1]
                 self.write(o, inst[-3], inputs[ipos])
@@ -168,7 +174,7 @@ class Computer:
                 if self.debug:
                     print("illegal optcode")
                     print(self.instPointer, inst, inst[3:5])
-                    self.printProgram()
+                    # self.printProgram()
                 self.halted = True
                 break
         return self.program[0] if not self.output else self.output
