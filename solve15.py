@@ -54,7 +54,12 @@ class Map:
         self.space[self.position] = 6 + self.direction
 
     def solve(self):
+        k = 0
         while not self.cmp.halted:
+            if not self.cmp.waitingForInput:
+                print("running without input")
+                self.cmp.run()
+                continue
             for pos in (
                 (self.position[0] - 1, self.position[1]),
                 (self.position[0] + 1, self.position[1]),
@@ -75,9 +80,11 @@ class Map:
                             pass
                 break
             self.printSpace()
-            for i in range(1, -4, -1):
-            # for i in range(-1, 4):
-                direction = (self.direction + i) % 4
+            # for i in (range(5) if k < 250 else range(-1, 4)):
+            # for i in (range(-1, 4) if k else range(1, -4, -1)):
+            for i in range(4):
+                # direction = (self.direction + i) % 4
+                direction = i
                 test = (self.position[0] + self.directions[direction][0],
                         self.position[1] + self.directions[direction][1])
                 if self.space[test] == -1:
@@ -85,6 +92,7 @@ class Map:
                     self.direction = direction
                     ret = self.cmp.run((self.dirCode[self.direction],))
                     print("ret", repr(ret))
+                    print("k", k)
                     print("toSearch", self.toSearch)
                     if ret == 2:
                         return test
@@ -94,12 +102,17 @@ class Map:
                         self.space[self.position] = 6 + self.direction
                     break
             else:
+                k = (k + 1) % 2
                 direction = self.space[self.position] % 4
                 test = (self.position[0] + self.directions[direction][0],
                         self.position[1] + self.directions[direction][1])
                 ret = self.cmp.run((1,))
+                print("ret", ret)
+                print("k", k)
+                print("toSearch", self.toSearch)
                 self.position = test
-            input()
+            # if not k % 10:
+                # input()
 
     def printSpace(self):
         minX = min(x[0] for x in self.space)

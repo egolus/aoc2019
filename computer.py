@@ -16,6 +16,17 @@ class Computer:
         for i, c in enumerate(program):
             self.program[i] = c
 
+    # instructions:
+    # 1 - add - 2 input 1 output
+    # 2 - mul - 2 input 1 output
+    # 3 - input - 1 output
+    # 4 - output - 1 input
+    # 5 - jump-if-true - 2 input
+    # 6 - jump-if-false - 2 input
+    # 7 - less than - 2 input 1 output
+    # 8 - equals - 2 input 1 output
+    # 9 - adjust relative base - 1 input
+    # 99 - halt
     def run(self, inputs=None):
         if inputs is None:
             inputs = []
@@ -34,11 +45,10 @@ class Computer:
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
                 i1 = self.loadVal(self.instPointer+2, inst[-4])
                 o = self.program[self.instPointer+3]
-                try:
-                    if self.debug:
+                if self.debug:
+                    try:
                         print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}, {o}")
-                except:
-                    if self.debug:
+                    except:
                         print(f"{inst}, {i0}, {i1}, {o}")
                 self.write(o, inst[-5], i0 + i1)
                 self.instPointer += 4
@@ -49,11 +59,10 @@ class Computer:
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
                 i1 = self.loadVal(self.instPointer+2, inst[-4])
                 o = self.program[self.instPointer+3]
-                try:
-                    if self.debug:
+                if self.debug:
+                    try:
                         print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}, {o}")
-                except:
-                    if self.debug:
+                    except:
                         print(f"{inst}, {i0}, {i1}, {o}")
                 self.write(o, inst[-5], i0 * i1)
                 self.instPointer += 4
@@ -88,13 +97,11 @@ class Computer:
                     print("jump-if-true")
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
                 i1 = self.loadVal(self.instPointer+2, inst[-4])
-                try:
-                    if self.debug:
-                        print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}")
-                except:
-                    if self.debug:
-                        print(f"{inst}, {i0}, {i1}")
                 if self.debug:
+                    try:
+                        print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}")
+                    except:
+                        print(f"{inst}, {i0}, {i1}")
                     print("pointer before:", self.instPointer)
                 if i0:
                     self.instPointer = i1
@@ -108,11 +115,10 @@ class Computer:
                     print("jump-if-false")
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
                 i1 = self.loadVal(self.instPointer+2, inst[-4])
-                try:
-                    if self.debug:
+                if self.debug:
+                    try:
                         print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}")
-                except:
-                    if self.debug:
+                    except:
                         print(f"{inst}, {i0}, {i1}")
                 if i0 == 0:
                     self.instPointer = i1
@@ -127,11 +133,10 @@ class Computer:
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
                 i1 = self.loadVal(self.instPointer+2, inst[-4])
                 o = self.program[self.instPointer+3]
-                try:
-                    if self.debug:
+                if self.debug:
+                    try:
                         print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}, {o}")
-                except:
-                    if self.debug:
+                    except:
                         print(f"{inst}, {i0}, {i1}, {o}")
                 self.write(o, inst[-5], 1 if i0 < i1 else 0)
                 self.instPointer += 4
@@ -142,11 +147,10 @@ class Computer:
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
                 i1 = self.loadVal(self.instPointer+2, inst[-4])
                 o = self.program[self.instPointer+3]
-                try:
-                    if self.debug:
+                if self.debug:
+                    try:
                         print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}, {self.program[self.program[self.instPointer+2]]}/{self.program[self.instPointer+2]}, {o}")
-                except:
-                    if self.debug:
+                    except:
                         print(f"{inst}, {i0}, {i1}, {o}")
                 self.write(o, inst[-5], 1 if i0 == i1 else 0)
                 self.instPointer += 4
@@ -155,11 +159,10 @@ class Computer:
                 if self.debug:
                     print("adjust relative base")
                 i0 = self.loadVal(self.instPointer+1, inst[-3])
-                try:
-                    if self.debug:
+                if self.debug:
+                    try:
                         print(f"{inst}, {self.program[self.program[self.instPointer+1]]}/{self.program[self.instPointer+1]}")
-                except:
-                    if self.debug:
+                    except:
                         print(f"{inst}, {i0}, {i1}, {o}")
                 self.relativeBase += i0
                 if self.debug:
@@ -171,10 +174,10 @@ class Computer:
                 self.halted = True
                 return
             else:
+                print("illegal optcode")
+                print(self.instPointer, inst, inst[3:5])
                 if self.debug:
-                    print("illegal optcode")
-                    print(self.instPointer, inst, inst[3:5])
-                    # self.printProgram()
+                    self.printProgram()
                 self.halted = True
                 break
         return self.program[0] if not self.output else self.output
